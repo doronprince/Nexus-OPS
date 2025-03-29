@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus WorkOps - Settings</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2563eb;
+            --secondary: #8338ec;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+        }
+
+        .nav-section {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            color: var(--gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            width: 300px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            margin-left: 0.5rem;
+            width: 100%;
+        }
+
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-description {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+        }
+
+        .settings-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .button.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button.secondary {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--dark);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+        }
+
+        .security-settings {
+            margin-top: 2rem;
+        }
+
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: var(--gray-light);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 70%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="Artboard 1@2x.png" alt="Nexus WorkOps Logo" class="logo-icon" style="width: 36px; height: 36px; border-radius: 8px; margin-right: 0.75rem;">
+                <div class="logo-text">Nexus <span>WorkOps</span></div>
+            </div>
+
+            <div class="nav-item">
+                <a href="im.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Dashboard
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="my-ai-workforce.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"></path><path d="M4 21v-2a4 4 0 0 1-3-3.87"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    My AI Workforce
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="page2.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    AI Marketplace
+                </a>
+            </div>
+
+            <div class="nav-section">Management</div>
+
+            <div class="nav-item">
+                <a href="analitical.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Analytics
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="performance-tracking.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><path d="M22 21H2"></path></svg>
+                    Performance Tracking
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="ai-training.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    AI Training
+                </a>
+            </div>
+
+            <div class="nav-section">Settings</div>
+
+            <div class="nav-item active">
+                <a href="settings.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Settings
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="notifications.html" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Notifications
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Settings</h1>
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search settings...">
+                </div>
+            </div>
+
+            <div class="settings-container">
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <h2 class="settings-title">General Settings</h2>
+                        <p class="settings-description">Manage your account and application preferences</p>
+                    </div>
+                    
+                    <form>
+                        <div class="form-group">
+                            <label>Display Name</label>
+                            <input type="text" value="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" value="john.doe@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Time Zone</label>
+                            <select class="form-select">
+                                <option>UTC+00:00 (London)</option>
+                                <option>UTC-05:00 (New York)</option>
+                                <option>UTC+01:00 (Paris)</option>
+                                <option>UTC+08:00 (Singapore)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Language</label>
+                            <select class="form-select">
+                                <option>English (US)</option>
+                                <option>English (UK)</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                            </select>
+                        </div>
+                        <div class="settings-footer">
+                            <button type="button" class="button secondary">Cancel</button>
+                            <button type="submit" class="button primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Notification Preferences</h2>
+                        <p class="settings-description">Configure how you receive notifications</p>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label>Email Notifications</label>
+                            <div class="checkbox-wrapper">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked> Performance Alerts
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked> System Updates
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox"> AI Agent Status Changes
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notification Frequency</label>
+                            <select class="form-select">
+                                <option>Real-time</option>
+                                <option>Daily Digest</option>
+                                <option>Weekly Summary</option>
+                            </select>
+                        </div>
+                        <div class="settings-footer">
+                            <button type="button" class="button secondary">Reset</button>
+                            <button type="submit" class="button primary">Save Preferences</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <h2 class="settings-title">Security Settings</h2>
+                        <p class="settings-description">Manage your account security and authentication preferences</p>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Enter new password">
+                            <div class="password-requirements">
+                                Password must be at least 8 characters long and include:
+                                <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                                    <li>At least one uppercase letter</li>
+                                    <li>At least one number</li>
+                                    <li>At least one special character</li>
+                                </ul>
+                            </div>
+                            <div class="password-strength">
+                                <div class="password-strength-bar"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" placeholder="Confirm new password">
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked>
+                                Enable two-factor authentication
+                            </label>
+                            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--gray);">
+                                Additional security layer using authenticator app or SMS
+                            </div>
+                        </div>
+                        <div class="settings-footer">
+                            <button type="button" class="button secondary">Cancel</button>
+                            <button type="submit" class="button primary">Update Security</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <h2 class="settings-title">AI Agent Settings</h2>
+                        <p class="settings-description">Configure default settings for AI agents</p>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label>Default AI Response Time</label>
+                            <select class="form-select">
+                                <option>Fast (0.5s)</option>
+                                <option>Normal (1.0s)</option>
+                                <option>Thorough (2.0s)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>AI Learning Mode</label>
+                            <div class="checkbox-wrapper">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    Enable continuous learning
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    Share anonymous usage data
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-footer">
+                            <button type="button" class="button secondary">Reset to Defaults</button>
+                            <button type="submit" class="button primary">Save AI Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+@import url('https://unpkg.com/normalize.css') layer(normalize);
+
+:root {
+  --font-size: 48px;
+  --bg-light: hsl(235 5% 85%);
+  --bg-dark: hsl(220 27% 6%);
+}
+
+body {
+  background: var(--bg-dark);
+  color: white;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme='light'] {
+  background: var(--bg-light);
+  color: black;
+}
+
+.toggle-logo {
+  width: 800px; /* Adjust size as needed */
+  height: auto;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.toggle-logo[aria-pressed='true'] {
+  transform: scale(1.1); /* Slight zoom effect when active */
+  filter: brightness(1.2);
+}

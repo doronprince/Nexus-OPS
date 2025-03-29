@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus WorkOps - Chat</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2563eb;
+            --secondary: #8338ec;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            background-color: var(--light);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+        }
+
+        .send-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .send-button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="Artboard 1@2x.png" alt="Nexus WorkOps Logo" class="logo-icon" style="width: 36px; height: 36px; border-radius: 8px; margin-right: 0.75rem;">
+                <div class="logo-text">Nexus <span>WorkOps</span></div>
+            </div>
+            <div class="nav-item">
+                <a href="my-ai-workforce.html" class="nav-link">My AI Workforce</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Chat with Agent</h1>
+            </div>
+
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type your message here">
+                    <button id="send-message" class="send-button">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the agent ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const agentId = urlParams.get('agent_id');
+
+        // Display the agent's name in the header
+        document.querySelector('.page-title').textContent = `Chat with Agent ${agentId}`;
+
+        // Send a message to the backend
+        document.getElementById('send-message').addEventListener('click', async () => {
+            const message = document.getElementById('chat-input').value;
+            if (!message) return;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        agent_id: agentId,
+                        message: message,
+                    }),
+                });
+
+                const data = await response.json();
+                const chatMessages = document.getElementById('chat-messages');
+
+                // Append the user's message
+                const userMessage = document.createElement('div');
+                userMessage.textContent = `You: ${message}`;
+                chatMessages.appendChild(userMessage);
+
+                // Append the agent's response
+                const agentMessage = document.createElement('div');
+                agentMessage.textContent = `Agent ${agentId}: ${data.response}`;
+                chatMessages.appendChild(agentMessage);
+
+                // Clear the input field
+                document.getElementById('chat-input').value = '';
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        });
+    </script>
+</body>
+</html>

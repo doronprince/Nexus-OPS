@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Theme Button</title>
+    <link rel="stylesheet" href="change-theme-button.css">
+  </head>
+  <body>
+    <h1>Theme Toggle Page</h1>
+    <main>
+      <!-- Logo acting as the toggle button -->
+      <img
+        src="Artboard 1@2x.png"
+        alt="Power Button"
+        class="toggle-logo"
+        aria-pressed="false"
+      />
+    </main>
+    <script>
+      // Redirect to the IM page when the logo is clicked
+      document.querySelector('.toggle-logo').addEventListener('click', () => {
+        window.location.href = 'im.html';
+      });
+    </script>
+  </body>
+</html>

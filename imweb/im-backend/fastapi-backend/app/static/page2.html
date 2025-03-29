@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus WorkOps - AI Marketplace</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --primary-dark: #2563eb;
+            --secondary: #8338ec;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-item svg {
+            margin-right: 0.75rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-section {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            color: var(--gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            width: 300px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            margin-left: 0.5rem;
+            width: 100%;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .button.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .button.primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .button svg {
+            margin-right: 0.5rem;
+        }
+
+        .marketplace-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .marketplace-intro {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .marketplace-intro-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .marketplace-intro-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .marketplace-intro-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .marketplace-intro-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .marketplace-filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-dropdown {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .filter-dropdown span {
+            margin-right: 0.5rem;
+        }
+
+        .sort-dropdown {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .categories {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .category {
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .category.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .category:hover:not(.active) {
+            background-color: var(--gray-light);
+        }
+
+        .featured-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title svg {
+            margin-right: 0.75rem;
+            color: var(--primary);
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .featured-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .featured-header {
+            position: relative;
+            height: 120px;
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+        }
+
+        .featured-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .featured-provider {
+            position: relative;
+            color: white;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .featured-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: auto;
+            line-height: 1.5;
+        }
+
+        .featured-pricing {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .featured-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .featured-rating {
+            display: flex;
+            align-items: center;
+            color: var(--warning);
+        }
+
+        .featured-rating-value {
+            margin-left: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .agents-section {
+            margin-bottom: 3rem;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .agent-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .agent-header {
+            position: relative;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+
+        .agent-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .agent-content {
+            padding: 1.5rem;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .agent-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .agent-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .agent-metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .agent-metric-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .agent-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .agent-tag {
+            background-color: var(--gray-light);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .add-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .add-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .add-button svg {
+            margin-right: 0.5rem;
+        }
+
+        .provider-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--gray-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.75rem;
+        }
+
+        .badge.new {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .badge.trending {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .services-section {
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            display: flex;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            font-size: 2rem;
+        }
+
+        .service-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .service-provider {
+            display: flex;
+            align-items: center;
+            color: var(--gray);
+        }
+
+        .service-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .service-details {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .service-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-detail-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .service-detail-label {
+            font-size: 0.8rem;
+            color: var (--gray);
+        }
+
+        .subscription-badge {
+            background-color: var(--success);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .pagination-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 8px;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .pagination-item:hover:not(.active) {
+            background-color: var(--gray-light);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 1024px) {
+            .featured-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card {
+                flex-direction: column;
+            }
+
+            .service-icon {
+                width: 100%;
+                height: 100px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .marketplace-filters {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <div class="sidebar">
+        <div class="logo">
+            <img src="Artboard 1@2x.png" alt="Nexus WorkOps Logo" class="logo-icon" style="width: 36px; height: 36px; border-radius: 8px; margin-right: 0.75rem;">
+            <div class="logo-text">Nexus <span>WorkOps</span></div>
+        </div>
+
+        <div class="nav-item">
+            <a href="im.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Dashboard
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="my-ai-workforce.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"></path><path d="M4 21v-2a4 4 0 0 1-3-3.87"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                My AI Workforce
+            </a>
+        </div>
+
+        <div class="nav-item active">
+            <a href="page2.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                AI Marketplace
+            </a>
+        </div>
+
+        <div class="nav-section">Management</div>
+
+        <div class="nav-item">
+            <a href="analitical.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Analytics
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="performance-tracking.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><path d="M22 21H2"></path></svg>
+                Performance Tracking
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="ai-training.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                AI Training
+            </a>
+        </div>
+
+        <div class="nav-section">Settings</div>
+
+        <div class="nav-item">
+            <a href="settings.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Settings
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="notifications.html" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                Notifications
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="page-title">AI Marketplace</h1>
+
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" placeholder="Search for AI agents and services...">
+            </div>
+        </div>
+
+        <!-- Marketplace Header -->
+        <div class="marketplace-header">
+            <div class="marketplace-intro">
+                <h2 class="marketplace-intro-title">Find the Perfect AI for Your Business Needs</h2>
+                <div class="marketplace-intro-content">
+                    <div class="marketplace-intro-text">
+                        <p>Welcome to the Nexus WorkOps AI Marketplace. Browse and hire from our curated collection of AI agents and services to enhance your business capabilities. Our marketplace features state-of-the-art AI solutions from leading providers, all with transparent pricing and performance metrics.</p>
+                        <div class="marketplace-intro-actions">
+                            <button class="button primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Add New AI Agent
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marketplace Filters -->
+        <div class="marketplace-filters">
+            <div class="filter-group">
+                <div class="filter-dropdown">
+                    <span>Filter by</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="filter-dropdown">
+                    <span>AI Provider</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="filter-dropdown">
+                    <span>Price Range</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="sort-dropdown">
+                <span>Sort by: Popularity</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <div class="category active">All Categories</div>
+            <div class="category">Natural Language Processing</div>
+            <div class="category">Computer Vision</div>
+            <div class="category">Data Analysis</div>
+            <div class="category">Content Generation</div>
+            <div class="category">Customer Support</div>
+            <div class="category">Automation</div>
+            <div class="category">Machine Learning</div>
+        </div>
+
+        <!-- Featured AI Solutions -->
+        <section class="featured-section">
+            <h2 class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 9-9 9-9-9 9-9z"></path></svg>
+                Featured AI Solutions
+            </h2>
+            <div class="featured-grid">
+                <div class="featured-card">
+                    <div class="featured-header" style="background-image: url('path/to/nvidia-image.jpg');">
+                        <div class="featured-provider">Nvidia</div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-name">Nvidia AI Solution</div>
+                        <div class="featured-description">High-performance AI solutions for various applications.</div>
+                        <div class="featured-pricing">
+                            <div class="featured-price">$199/month</div>
+                            <div class="featured-rating">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8 21 9 17 14 18 21 12 18 6 21 7 14 3 9 9 8 12 2"></polygon></svg>
+                                <span class="featured-rating-value">4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-card">
+                    <div class="featured-header" style="background-image: url('path/to/copilot-image.jpg');">
+                        <div class="featured-provider">GitHub</div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-name">Copilot</div>
+                        <div class="featured-description">AI-powered code completion and suggestions.</div>
+                        <div class="featured-pricing">
+                            <div class="featured-price">$10/month</div>
+                            <div class="featured-rating">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8 21 9 17 14 18 21 12 18 6 21 7 14 3 9 9 8 12 2"></polygon></svg>
+                                <span class="featured-rating-value">4.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-card">
+                    <div class="featured-header" style="background-image: url('path/to/gemini-image.jpg');">
+                        <div class="featured-provider">Gemini</div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-name">Gemini AI</div>
+                        <div class="featured-description">Advanced AI solutions for business intelligence.</div>
+                        <div class="featured-pricing">
+                            <div class="featured-price">$299/month</div>
+                            <div class="featured-rating">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8 21 9 17 14 18 21 12 18 6 21 7 14 3 9 9 8 12 2"></polygon></svg>
+                                <span class="featured-rating-value">4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more featured AI solutions as needed -->
+            </div>
+        </section>
+
+        <!-- Agents Section -->
+        <section class="agents-section">
+            <h2 class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 9-9 9-9-9 9-9z"></path></svg>
+                AI Agents
+            </h2>
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon" style="background-color: #3a86ff;">N</div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="agent-name">Nvidia Agent</div>
+                        <div class="agent-description">High-performance AI agent for various applications.</div>
+                        <div class="agent-metrics">
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">200+</div>
+                                <div class="agent-metric-label">Deployments</div>
+                            </div>
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">4.8</div>
+                                <div class="agent-metric-label">Rating</div>
+                            </div>
+                        </div>
+                        <div class="agent-tags">
+                            <div class="agent-tag">NLP</div>
+                            <div class="agent-tag">Vision</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon" style="background-color: #2563eb;">C</div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="agent-name">Copilot Agent</div>
+                        <div class="agent-description">AI-powered code completion and suggestions.</div>
+                        <div class="agent-metrics">
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">500+</div>
+                                <div class="agent-metric-label">Deployments</div>
+                            </div>
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">4.7</div>
+                                <div class="agent-metric-label">Rating</div>
+                            </div>
+                        </div>
+                        <div class="agent-tags">
+                            <div class="agent-tag">Code</div>
+                            <div class="agent-tag">Development</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon" style="background-color: #8338ec;">G</div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="agent-name">Gemini Agent</div>
+                        <div class="agent-description">Advanced AI agent for business intelligence.</div>
+                        <div class="agent-metrics">
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">300+</</div>
+                                <div class="agent-metric-label">Deployments</div>
+                            </div>
+                            <div class="agent-metric">
+                                <div class="agent-metric-value">4.9</div>
+                                <div class="agent-metric-label">Rating</div>
+                            </div>
+                        </div>
+                        <div class="agent-tags">
+                            <div class="agent-tag">BI</div>
+                            <div class="agent-tag">Analytics</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more AI agents as needed -->
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services-section">
+            <h2 class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 9-9 9-9-9 9-9z"></path></svg>
+                AI Services
+            </h2>
+            <div class="service-card">
+                <div class="service-icon" style="background-color: #8338ec;">S</div>
+                <div class="service-content">
+                    <div class="service-header">
+                        <div class="service-name">Service Name</div>
+                        <div class="service-provider">Provider Name</div>
+                    </div>
+                    <div class="service-description">Short description of the AI service.</div>
+                    <div class="service-details">
+                        <div class="service-detail">
+                            <div class="service-detail-value">$49/month</div>
+                            <div class="service-detail-label">Price</div>
+                        </div>
+                        <div class="service-detail">
+                            <div class="service-detail-value">4.7</div>
+                            <div class="service-detail-label">Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat similar blocks for other AI services -->
+        </section>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <div class="pagination-item">1</div>
+            <div class="pagination-item active">2</div>
+            <div class="pagination-item">3</div>
+            <div class="pagination-item">4</div>
+            <div class="pagination-item">5</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
